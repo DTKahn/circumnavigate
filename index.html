@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Circumnavigate</title>
+    <meta name="description" content="Slice the Earth with a flat plane through its center and see every continent, ocean, country and city along the circle it draws." />
+    <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content="Circumnavigate" />
+    <meta property="og:description" content="Draw a straight line all the way around the world. What does it cross?" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="bar">
+        <a class="brand" href="./" aria-label="Circumnavigate home">
+          <svg viewBox="0 0 32 32" aria-hidden="true" class="logo">
+            <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.2" />
+            <ellipse cx="16" cy="16" rx="12" ry="5" fill="none" stroke="#ff4f3a" stroke-width="2.6" transform="rotate(-28 16 16)" />
+          </svg>
+          <span>Circumnavigate</span>
+        </a>
+        <div class="bar-actions">
+          <div class="seg" role="group" aria-label="Distance units">
+            <button type="button" data-unit="km" aria-pressed="true">km</button>
+            <button type="button" data-unit="mi" aria-pressed="false">mi</button>
+          </div>
+          <button type="button" class="pill accent" id="share">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" /></svg>
+            <span>Share</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="stage" aria-label="3D globe">
+        <div id="globe"></div>
+        <div class="loading" id="loading"><div class="spinner"></div>Loading the world…</div>
+        <div class="hint" id="hint"><span class="hint-long">Tap the globe to move your starting point · drag to spin</span><span class="hint-short">Tap to move the start · drag to spin</span></div>
+        <div class="stage-tools">
+          <button type="button" class="tool" id="togglePlane" aria-pressed="true" title="Show or hide the cutting plane">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15l6-6h12l-6 6z" /></svg><span>Plane</span>
+          </button>
+          <button type="button" class="tool" id="recenter" title="Turn the globe back to your starting point">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" /><path d="M12 2v4M12 18v4M2 12h4M18 12h4" /></svg><span>Recenter</span>
+          </button>
+        </div>
+      </section>
+
+      <main class="panel" id="panel">
+        <section class="card controls">
+          <p class="eyebrow">Your great circle starts</p>
+          <h1 id="startName">&nbsp;</h1>
+          <p class="sub" id="startCoords">&nbsp;</p>
+
+          <div class="search" data-role="start">
+            <label for="qStart">Start at</label>
+            <div class="field">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></svg>
+              <input id="qStart" type="search" placeholder="A city, country, landmark or “lat, lon”" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="sStart" />
+              <button type="button" class="icon-btn" id="locate" title="Use my location" aria-label="Use my location">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 19-3-5-3 5z" transform="rotate(45 12 12)" /></svg>
+              </button>
+            </div>
+            <ul class="suggest" id="sStart" role="listbox"></ul>
+          </div>
+          <div class="search" data-role="through">
+            <label for="qThrough">Aim through</label>
+            <div class="field">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="2.5" /></svg>
+              <input id="qThrough" type="search" placeholder="Pick a second place to pass through" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="sThrough" />
+            </div>
+            <ul class="suggest" id="sThrough" role="listbox"></ul>
+          </div>
+
+          <div class="direction">
+            <div class="dial" id="dial" role="slider" tabindex="0" aria-label="Direction" aria-valuemin="0" aria-valuemax="359" aria-valuenow="0">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="dial-face" cx="60" cy="60" r="57" />
+                <g id="ticks"></g>
+                <text x="60" y="22" class="dial-n">N</text>
+                <text x="99" y="64" class="dial-l">E</text>
+                <text x="60" y="105" class="dial-l">S</text>
+                <text x="21" y="64" class="dial-l">W</text>
+                <g id="needle">
+                  <line x1="60" y1="60" x2="60" y2="16" />
+                  <circle cx="60" cy="16" r="8" class="knob" />
+                </g>
+                <circle cx="60" cy="60" r="4" class="hub" />
+              </svg>
+            </div>
+            <div class="dir-info">
+              <p class="eyebrow">Heading</p>
+              <p class="dir-big" id="dirLabel">North</p>
+              <p class="sub" id="dirDeg">0°</p>
+              <div class="btn-row">
+                <button type="button" class="pill" id="turn" title="Rotate the direction by 90°">Turn 90°</button>
+                <button type="button" class="pill" id="flip" title="Go around the other way">Reverse</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats" aria-live="polite">
+          <div class="tiles">
+            <div class="tile"><span class="tile-n" id="stLand">–</span><span class="tile-l">on land</span></div>
+            <div class="tile"><span class="tile-n" id="stWater">–</span><span class="tile-l">over water</span></div>
+            <div class="tile"><span class="tile-n" id="stCountries">–</span><span class="tile-l">countries</span></div>
+            <div class="tile"><span class="tile-n" id="stCross">–</span><span class="tile-l">coastlines crossed</span></div>
+          </div>
+          <div class="strip-wrap">
+            <canvas class="strip" id="strip" height="28" aria-label="Land and water along the path"></canvas>
+            <div class="strip-axis" id="stripAxis"></div>
+          </div>
+          <p class="facts" id="facts"></p>
+        </section>
+
+        <section class="block">
+          <div class="block-head">
+            <h2>Interesting paths</h2>
+            <p class="sub">Record-breaking circles, found by testing 60,000 of them.</p>
+          </div>
+          <div class="presets" id="presets"></div>
+        </section>
+
+        <section class="block">
+          <div class="block-head">
+            <h2>Along the way</h2>
+            <p class="sub">Everything your line crosses, in order. Tap one to find it on the globe.</p>
+          </div>
+          <div class="chips" id="chips" role="group" aria-label="Show categories"></div>
+          <ol class="journey" id="journey"></ol>
+        </section>
+
+        <section class="block learn">
+          <div class="block-head">
+            <h2>What is a great circle?</h2>
+          </div>
+          <div class="learn-grid">
+            <figure class="diagram">
+              <svg viewBox="0 0 220 160" aria-hidden="true">
+                <path d="M20 112 L80 58 L206 58 L146 112 Z" class="d-plane" />
+                <circle cx="110" cy="85" r="56" class="d-earth" />
+                <ellipse cx="110" cy="85" rx="56" ry="17" class="d-gc" />
+                <circle cx="110" cy="85" r="3.5" class="d-center" />
+              </svg>
+              <figcaption>A flat plane through Earth’s center cuts the surface along a great circle.</figcaption>
+            </figure>
+            <ul class="learn-list">
+              <li><strong>The biggest circle on a ball.</strong> Slice an orange straight through its middle and the cut edge is a great circle. Cut anywhere else and you get a smaller circle.</li>
+              <li><strong>Always the same length.</strong> Every great circle on Earth is about <span data-dist="40030">40,030 km</span> long, no matter which way it points.</li>
+              <li><strong>The shortest way between two places.</strong> That’s why long flights seem to curve on flat maps: pilots follow great circles.</li>
+              <li><strong>Halves the world.</strong> A great circle splits Earth into two equal hemispheres, and always passes through the exact opposite side of the planet from where it starts, called the antipode.</li>
+              <li><strong>Famous examples.</strong> The Equator and every line of longitude are great circles. Other lines of latitude are not.</li>
+            </ul>
+          </div>
+        </section>
+
+        <footer class="foot">
+          <p>Map data from <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (public domain). Borders are simplified and continent boundaries are approximate. Cities, peaks and landmarks are listed when they are within a short distance of the line.</p>
+        </footer>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

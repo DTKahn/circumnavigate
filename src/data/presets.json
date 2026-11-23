@@ -1,0 +1,101 @@
+{
+  "most-land": {
+    "lat": -50.081,
+    "lon": -68.137,
+    "dir": 5.25,
+    "landPct": 56.7,
+    "transitions": 58,
+    "countries": 14,
+    "continents": 5,
+    "longestLandKm": 6772,
+    "longestWaterKm": 3892
+  },
+  "most-water": {
+    "lat": -82.192,
+    "lon": -65.511,
+    "dir": 41.1,
+    "landPct": 6.4,
+    "transitions": 8,
+    "countries": 3,
+    "continents": 3,
+    "longestLandKm": 1368,
+    "longestWaterKm": 21349
+  },
+  "fewest-crossings": {
+    "lat": 4.8,
+    "lon": -8.784,
+    "dir": 52.19,
+    "landPct": 42.9,
+    "transitions": 4,
+    "countries": 21,
+    "continents": 3,
+    "longestLandKm": 13555,
+    "longestWaterKm": 18625
+  },
+  "most-crossings": {
+    "lat": 19.193,
+    "lon": 105.683,
+    "dir": 1.57,
+    "landPct": 49.4,
+    "transitions": 124,
+    "countries": 17,
+    "continents": 4,
+    "longestLandKm": 3714,
+    "longestWaterKm": 6705
+  },
+  "most-countries": {
+    "lat": 42.162,
+    "lon": 57.633,
+    "dir": 110.23,
+    "landPct": 44.1,
+    "transitions": 40,
+    "countries": 37,
+    "continents": 4,
+    "longestLandKm": 5993,
+    "longestWaterKm": 10386
+  },
+  "fewest-countries": {
+    "lat": 53.142,
+    "lon": -97.353,
+    "dir": 95.08,
+    "landPct": 16.3,
+    "transitions": 18,
+    "countries": 3,
+    "continents": 2,
+    "longestLandKm": 1924,
+    "longestWaterKm": 21883
+  },
+  "longest-voyage": {
+    "lat": 58.485,
+    "lon": 162.133,
+    "dir": 108.66,
+    "landPct": 19,
+    "transitions": 8,
+    "countries": 4,
+    "continents": 1,
+    "longestLandKm": 4381,
+    "longestWaterKm": 32080
+  },
+  "longest-walk": {
+    "lat": 10.102,
+    "lon": -14.172,
+    "dir": 58.04,
+    "landPct": 43.9,
+    "transitions": 10,
+    "countries": 19,
+    "continents": 3,
+    "longestLandKm": 13177,
+    "longestWaterKm": 18481
+  },
+  "most-continents": {
+    "lat": -49.962,
+    "lon": -68.415,
+    "dir": 7.44,
+    "landPct": 56.1,
+    "transitions": 54,
+    "countries": 17,
+    "continents": 6,
+    "longestLandKm": 6683,
+    "longestWaterKm": 3725
+  }
+}
